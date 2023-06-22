@@ -6,6 +6,7 @@ import SelectWithAdd from "../../../components/select-with-add";
 import { getSelectOptions } from "../../../helpers/formatting";
 import { moviesService } from "../../../services";
 import directorsService from "../../../services/directors";
+import SearchSelect from "../../../components/search-select";
 
 interface IStringArray {
   [name: string]: string[];
@@ -14,24 +15,14 @@ interface IStringArray {
 const CreateMovie: FC = () => {
   const [types, setTypes] = useState<IStringArray | null>();
   const [genres, setGenres] = useState<IStringArray | null>();
-  const [directors, setDirectors] = useState<IStringArray | null>();
   const [posterImage, setPosterImage] = useState<UploadFile | null>(null);
 
   useEffect(() => {
-    getTableFilters(); //
-  }, []);
-
-  useEffect(() => {
-    const fetchDirectors = async () => {
-      const data = await directorsService.getDirectors();
-      console.log("data", data);
-    };
-    fetchDirectors();
+    getTableFilters();
   }, []);
 
   const typesOptions = getSelectOptions(types);
   const genresOptions = getSelectOptions(genres);
-  const directorsOptions = getSelectOptions(directors);
 
   const onUploadChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status !== "uploading") {
@@ -50,10 +41,9 @@ const CreateMovie: FC = () => {
   };
 
   async function getTableFilters() {
-    const { types, genres, directors } = await moviesService.getMoviesFilters();
+    const { types, genres } = await moviesService.getMoviesFilters();
     setTypes(types);
     setGenres(genres);
-    setDirectors(directors);
   }
 
   const onFinish = (values: any) => {};
@@ -61,6 +51,10 @@ const CreateMovie: FC = () => {
     <Form
       name="movie"
       onFinish={onFinish}
+      onFieldsChange={(changed, all) => {
+        console.log("changed fields", changed);
+        console.log("all fields", all);
+      }}
       style={{ width: "100%" }}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
@@ -133,7 +127,12 @@ const CreateMovie: FC = () => {
         name="directors"
         rules={[{ required: true, message: "Please select directors!" }]}
       >
-        <SelectWithAdd options={directorsOptions} />
+        <SearchSelect
+          mode="multiple"
+          placeholder="Select users"
+          fetchOptions={directorsService.getDirectors}
+          searchBy="name"
+        />
       </Form.Item>
     </Form>
   );

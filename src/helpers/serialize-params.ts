@@ -12,7 +12,7 @@ const serialize = (params?: ITableParams) => {
     // pagination
     if (params.pagination) {
       const { current, pageSize } = params.pagination;
-      query.push(`offset=${current}`);
+      query.push(`offset=${current || 1}`);
       query.push(`limit=${pageSize}`);
     }
 
