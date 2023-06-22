@@ -1,0 +1,24 @@
+.app-layout {
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    padding-inline: 50;
+    background-color: dodgerblue;
+    border-bottom: 1px solid rgb(157, 155, 155);
+  }
+
+  &__sider {
+    position: sticky !important;
+    height: 100vh;
+    top: 0;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background-color: white;
+  }
+}

@@ -1,0 +1,14 @@
+.nav-menu {
+  position: sticky;
+  top: 0.5rem;
+
+  ul {
+    padding: 1rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: dodgerblue !important;
+
+    li {
+      color: white;
+    }
+  }
+}
