@@ -129,9 +129,11 @@ const CreateMovie: FC = () => {
       >
         <SearchSelect
           mode="multiple"
-          placeholder="Select users"
+          placeholder="Select directors"
           fetchOptions={directorsService.getDirectors}
+          addItem={directorsService.addDirector}
           searchBy="name"
+          name="director"
         />
       </Form.Item>
     </Form>

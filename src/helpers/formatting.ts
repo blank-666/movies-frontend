@@ -1,15 +1,8 @@
-const capitalizeFirstLetter = (word: string) => {
-  const firstLetter = word.charAt(0);
+const capitalizeFirstLetter = (string: string) =>
+  string[0].toUpperCase() + string.substring(1);
 
-  const firstLetterCap = firstLetter.toUpperCase();
-
-  const remainingLetters = word.slice(1);
-
-  return firstLetterCap + remainingLetters;
-};
-
-// const getSelectOptions = (arr?: string[] | number[]) =>
-//   arr.map((val) => ({ label: val.toString(), value: val.toString() }));
+const convertName = (name: string) =>
+  name.split(" ").map(capitalizeFirstLetter).join(" ");
 
 const getSelectOptions = (arr: any = []) =>
   arr.map((val: string | number) => ({
@@ -17,4 +10,4 @@ const getSelectOptions = (arr: any = []) =>
     value: val.toString(),
   }));
 
-export { capitalizeFirstLetter, getSelectOptions };
+export { capitalizeFirstLetter, getSelectOptions, convertName };

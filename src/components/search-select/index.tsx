@@ -1,32 +1,59 @@
 import { FC, useMemo, useState, useRef, useEffect } from "react";
-import { Select, SelectProps, Spin } from "antd";
+import {
+  Button,
+  Divider,
+  Input,
+  InputRef,
+  Select,
+  SelectProps,
+  Space,
+  Spin,
+} from "antd";
 import debounce from "lodash/debounce";
+import { PlusOutlined } from "@ant-design/icons";
+import "./style.scss";
+import { convertName } from "../../helpers/formatting";
 
 interface IOption {
   label: string | React.ReactNode;
   value: string;
 }
 
-interface IResponse {
+interface IOptionResponse {
   data: any[];
+}
+
+interface IItemResponse {
+  item: IItem;
+  message?: string;
+}
+
+interface IItem {
+  _id: string;
 }
 
 interface ISearchSelect extends SelectProps {
   searchBy: string;
-  fetchOptions: (search: any) => Promise<IResponse>;
+  fetchOptions: (search: any) => Promise<IOptionResponse>;
+  name?: string;
+  addItem?: (item: any) => Promise<IItemResponse>;
   debounceTimeout?: number;
 }
 
 const SearchSelect: FC<ISearchSelect> = ({
   fetchOptions,
+  addItem,
   searchBy,
+  name = "item",
   debounceTimeout = 800,
   ...props
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [initialData, setInitialData] = useState<any[]>([]);
   const [options, setOptions] = useState<any[]>([]);
+  const [newItem, setNewItem] = useState<string>("");
   const fetchRef = useRef(0);
+  const inputRef = useRef<InputRef>(null);
 
   const convertToOptions = (items: any[]): IOption[] => {
     return items.map((item) => ({
@@ -42,6 +69,7 @@ const SearchSelect: FC<ISearchSelect> = ({
     setOptions(initialData);
     setLoading(true);
 
+    if (!isInitial && !value) return setLoading(false);
     const searchParams = {
       [searchBy]: value,
     };
@@ -79,16 +107,80 @@ const SearchSelect: FC<ISearchSelect> = ({
     [fetchOptions, debounceTimeout]
   );
 
-  const resetOptions = () => setOptions(initialData);
+  const resetOptions = () => {
+    setNewItem("");
+    setOptions(initialData);
+  };
+
+  const onNewItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewItem(event.target.value);
+  };
+
+  const onAddNewItem = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => {
+    e.preventDefault();
+    if (addItem) {
+      setLoading(true);
+      const { item } = await addItem(convertName(newItem));
+      const convertedItem = {
+        //@ts-ignore
+        label: item[searchBy],
+        value: item._id,
+      };
+
+      setOptions((prev) => [convertedItem, ...prev]);
+      setNewItem("");
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+      setLoading(false);
+    }
+  };
+
+  const selectFooter = (menu: React.ReactElement) => (
+    <>
+      {menu}
+      <Divider style={{ margin: "8px 0" }} />
+      <Space style={{ padding: "0 8px 4px" }}>
+        <Input
+          placeholder={`Please enter new ${name}`}
+          ref={inputRef}
+          value={newItem}
+          onChange={onNewItemChange}
+        />
+        <Button
+          type="text"
+          icon={<PlusOutlined />}
+          onClick={onAddNewItem}
+          disabled={!newItem}
+        >
+          Add {name}
+        </Button>
+      </Space>
+    </>
+  );
+
+  const notFoundContent = loading ? (
+    <div className="spinner-container">
+      <Spin size="small" />
+    </div>
+  ) : (
+    <div className="not-found-container">
+      The {name} has not been found. <br />
+      {addItem ? "You can add a new one!" : null}
+    </div>
+  );
 
   return (
     <Select
       filterOption={false}
       onSearch={debounceFetcher}
-      notFoundContent={loading ? <Spin size="small" /> : null}
+      notFoundContent={notFoundContent}
       {...props}
       options={options}
-      onBlur={resetOptions}
+      dropdownRender={selectFooter}
+      onDropdownVisibleChange={resetOptions}
     />
   );
 };
