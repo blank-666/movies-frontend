@@ -5,6 +5,8 @@ const apiUrl = "http://localhost:3006";
 
 axios.interceptors.response.use(
   (result) => {
+    if (result.data.message) message.success(result.data.message);
+
     return result;
   },
   async (err) => {

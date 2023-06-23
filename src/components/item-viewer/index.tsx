@@ -22,6 +22,7 @@ const ItemViewer: FC<IItemViewer> = ({ item, keyToLabelMap }) => {
 
   return (
     <List
+      className="view-container"
       header={
         <Typography.Title level={3} style={{ textAlign: "center" }}>
           Movie Details
@@ -37,12 +38,14 @@ const ItemViewer: FC<IItemViewer> = ({ item, keyToLabelMap }) => {
           renderItem = <Image src={itemValue[1]} width={200} />;
         if (typeof value === "boolean") renderItem = value.toString();
         if (Array.isArray(value))
-          renderItem = (
+          renderItem = value.length ? (
             <ul>
               {value.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
+          ) : (
+            "---"
           );
 
         return (

@@ -1,8 +1,7 @@
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, message, Select, Upload } from "antd";
 import { UploadChangeParam, UploadFile } from "antd/es/upload";
 import { FC, useEffect, useState } from "react";
-import SelectWithAdd from "../../../components/select-with-add";
 import { getSelectOptions } from "../../../helpers/formatting";
 import { moviesService } from "../../../services";
 import directorsService from "../../../services/directors";
@@ -16,7 +15,6 @@ interface IStringArray {
 const CreateMovie: FC = () => {
   const [types, setTypes] = useState<IStringArray | null>();
   const [genres, setGenres] = useState<IStringArray | null>();
-  const [posterImage, setPosterImage] = useState<UploadFile | null>(null);
 
   useEffect(() => {
     getTableFilters();
@@ -26,9 +24,6 @@ const CreateMovie: FC = () => {
   const genresOptions = getSelectOptions(genres);
 
   const onUploadChange = (info: UploadChangeParam<UploadFile<any>>) => {
-    if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
     if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
     } else if (info.file.status === "error") {
@@ -37,8 +32,8 @@ const CreateMovie: FC = () => {
   };
 
   const fileValueHandler = (e: any) => {
-    if (e.file) setPosterImage(e.file);
-    if (!e.fileList.length) setPosterImage(null);
+    if (e.fileList && e.fileList.length) return e.fileList[0];
+    return null;
   };
 
   async function getTableFilters() {
@@ -47,15 +42,34 @@ const CreateMovie: FC = () => {
     setGenres(genres);
   }
 
-  const onFinish = (values: any) => {};
+  const convertToFormData = (values: any) => {
+    const data = new FormData();
+    const valuesKeys = Object.keys(values);
+
+    for (const key of valuesKeys) {
+      const value = values[key];
+
+      if (!value) continue;
+      if (value?.originFileObj) {
+        data.append(key, value.originFileObj);
+      } else data.append(key, values[key]);
+    }
+
+    return data;
+  };
+
+  const onFinish = async (values: any) => {
+    values.test = true;
+
+    const formData = convertToFormData(values);
+
+    await moviesService.createMovie(formData);
+  };
+
   return (
     <Form
       name="movie"
       onFinish={onFinish}
-      onFieldsChange={(changed, all) => {
-        console.log("changed fields", changed);
-        console.log("all fields", all);
-      }}
       style={{ width: "100%" }}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
@@ -67,7 +81,6 @@ const CreateMovie: FC = () => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item
         label="Type"
         name="type"
@@ -76,7 +89,6 @@ const CreateMovie: FC = () => {
       >
         <Select options={typesOptions} />
       </Form.Item>
-
       <Form.Item
         label="Plot"
         name="plot"
@@ -84,15 +96,9 @@ const CreateMovie: FC = () => {
       >
         <Input.TextArea />
       </Form.Item>
-
-      <Form.Item
-        label="Full Plot"
-        name="fullplot"
-        rules={[{ required: true, message: "Please input value!" }]}
-      >
+      <Form.Item label="Full Plot" name="fullplot">
         <Input.TextArea />
       </Form.Item>
-
       <Form.Item
         label="Year"
         name="year"
@@ -100,7 +106,6 @@ const CreateMovie: FC = () => {
       >
         <DatePicker picker="year" />
       </Form.Item>
-
       <Form.Item
         label="Poster"
         name="poster"
@@ -122,7 +127,9 @@ const CreateMovie: FC = () => {
           </div>
         </Upload>
       </Form.Item>
-
+      <Form.Item label="Genres" name="genres">
+        <Select options={genresOptions} mode="multiple" />
+      </Form.Item>
       <Form.Item
         label="Directors"
         name="directors"
@@ -137,12 +144,7 @@ const CreateMovie: FC = () => {
           name="director"
         />
       </Form.Item>
-
-      <Form.Item
-        label="Actors"
-        name="actors"
-        rules={[{ required: true, message: "Please select actors!" }]}
-      >
+      <Form.Item label="Actors" name="actors">
         <SearchSelect
           mode="multiple"
           placeholder="Select actors"
@@ -151,6 +153,11 @@ const CreateMovie: FC = () => {
           searchBy="name"
           name="actor"
         />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Create
+        </Button>
       </Form.Item>
     </Form>
   );
