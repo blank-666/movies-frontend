@@ -9,7 +9,7 @@ export interface IMovie {
   plot: string;
   genres: string[];
   rated: string;
-  cast: string[];
+  actors: string[];
   num_mflix_comments: number;
   poster: string;
   title: string;

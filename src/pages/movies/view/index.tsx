@@ -29,7 +29,7 @@ const ViewMovie: FC = () => {
     type: "Type",
     directors: "Directors",
     writers: "Writers",
-    cast: "Cast",
+    actors: "Cast",
     is_favorite: "Favorite",
   };
 
