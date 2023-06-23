@@ -27,6 +27,7 @@ const ViewMovie: FC = () => {
     fullplot: "Full Plot",
     year: "Year",
     type: "Type",
+    genres: "Genres",
     directors: "Directors",
     writers: "Writers",
     actors: "Cast",

@@ -7,12 +7,15 @@ import { moviesService } from "../../../services";
 import directorsService from "../../../services/directors";
 import SearchSelect from "../../../components/search-select";
 import actorsService from "../../../services/actors";
+import { useNavigate } from "react-router";
 
 interface IStringArray {
   [name: string]: string[];
 }
 
 const CreateMovie: FC = () => {
+  const navigate = useNavigate();
+
   const [types, setTypes] = useState<IStringArray | null>();
   const [genres, setGenres] = useState<IStringArray | null>();
 
@@ -63,7 +66,10 @@ const CreateMovie: FC = () => {
 
     const formData = convertToFormData(values);
 
-    await moviesService.createMovie(formData);
+    const response = await moviesService.createMovie(formData);
+
+    if (response.id) navigate(`/`);
+    navigate(`/movies/view/${response.id}`);
   };
 
   return (
