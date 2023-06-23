@@ -7,6 +7,7 @@ import { getSelectOptions } from "../../../helpers/formatting";
 import { moviesService } from "../../../services";
 import directorsService from "../../../services/directors";
 import SearchSelect from "../../../components/search-select";
+import actorsService from "../../../services/actors";
 
 interface IStringArray {
   [name: string]: string[];
@@ -134,6 +135,21 @@ const CreateMovie: FC = () => {
           addItem={directorsService.addDirector}
           searchBy="name"
           name="director"
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Actors"
+        name="actors"
+        rules={[{ required: true, message: "Please select actors!" }]}
+      >
+        <SearchSelect
+          mode="multiple"
+          placeholder="Select actors"
+          fetchOptions={actorsService.getActors}
+          addItem={actorsService.addActor}
+          searchBy="name"
+          name="actor"
         />
       </Form.Item>
     </Form>
