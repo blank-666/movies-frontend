@@ -6,7 +6,13 @@ import {
   RouterProvider,
   Routes,
 } from "react-router-dom";
-import { CreateMovie, Home, ManageMovies, ViewMovie } from "../../pages";
+import {
+  CreateMovie,
+  Home,
+  ManageMovies,
+  ViewMovie,
+  EditMovie,
+} from "../../pages";
 import PageLayout from "../layout";
 
 const AppRouter: FC = () => {
@@ -17,6 +23,7 @@ const AppRouter: FC = () => {
         <Route path="/movies">
           <Route index element={<ManageMovies />} />
           <Route path="view/:id" element={<ViewMovie />} />
+          <Route path="edit/:id" element={<EditMovie />} />
           <Route path="create" element={<CreateMovie />} />
         </Route>
 

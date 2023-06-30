@@ -154,6 +154,21 @@ const ManageMovies: FC = () => {
     }
   };
 
+  const onClickAction = async (
+    cb: (ids: string[]) => Promise<{}>,
+    selectedIds: string[]
+  ) => {
+    setLoading(true);
+    const data = await cb(selectedIds);
+    if (data) {
+      setTimeout(() => {
+        setRefetchData(true);
+      }, 1000);
+    } else {
+      setLoading(false);
+    }
+  };
+
   return (
     <NavContainer menu={[]}>
       {selectedIds.length ? (
@@ -185,9 +200,11 @@ const ManageMovies: FC = () => {
         onEndRefetch={() => setRefetchData(false)}
         getDataAction={moviesService.getAllMovies}
         onReceivingData={onReceivingData}
+        onDeleteItem={(ids) => onClickAction(moviesService.deleteMovies, ids)}
         data={dataSource}
         columns={tableColumns}
         rowSelection={rowSelection}
+        actionsColumn
       />
     </NavContainer>
   );

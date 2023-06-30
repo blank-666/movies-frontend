@@ -7,7 +7,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { InputRef, Table as AntdTable, TablePaginationConfig } from "antd";
+import {
+  InputRef,
+  Table as AntdTable,
+  TablePaginationConfig,
+  Space,
+  Button,
+  Popconfirm,
+} from "antd";
 import {
   FilterConfirmProps,
   FilterValue,
@@ -18,7 +25,11 @@ import { ITableParams } from "../../interfaces/params.interface";
 import ColumnSearchDropdown, {
   IFilterDropdownProps,
 } from "./columnSearchDropdown";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { LoadingContext } from "../../context/loading.context";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 
@@ -36,6 +47,8 @@ interface ITable {
   columns: IColumn[];
   rowSelection?: IRowSelection;
   refetch?: boolean;
+  actionsColumn?: boolean;
+  onDeleteItem?: (ids: string[]) => Promise<any>;
   onEndRefetch?: () => void;
   getDataAction: (params: any) => Promise<any>;
   onReceivingData: (data: object[]) => void;
@@ -46,6 +59,8 @@ const Table: FC<ITable> = ({
   columns,
   rowSelection,
   refetch,
+  actionsColumn,
+  onDeleteItem,
   onEndRefetch,
   getDataAction,
   onReceivingData,
@@ -205,18 +220,58 @@ const Table: FC<ITable> = ({
     }
   };
 
+  const actionsColumnRender = {
+    title: "Actions",
+    dataIndex: "",
+    key: "action",
+    render: (_: any, record: any) => (
+      <Space>
+        <Button
+          size="small"
+          shape="circle"
+          icon={<EditOutlined />}
+          onClick={() => navigateToEditPage(record._id)}
+        />
+
+        {onDeleteItem ? (
+          <Popconfirm
+            title="Delete"
+            description="Are you sure to delete this item?"
+            onConfirm={() => onDelete(record._id)}
+            okText="Delete"
+            cancelText="Cancel"
+          >
+            <Button size="small" shape="circle" icon={<DeleteOutlined />} />
+          </Popconfirm>
+        ) : null}
+      </Space>
+    ),
+  };
+
   const convertedColumns = useMemo((): any => {
-    return columns.map((column) => {
+    const columnsWithSearch = columns.map((column) => {
       if (column?.search) {
         return addColumnSearch(column);
       } else return column;
     });
-  }, [columns]);
+
+    return actionsColumn
+      ? [...columnsWithSearch, actionsColumnRender]
+      : columnsWithSearch;
+  }, [columns, actionsColumn]);
 
   const doubleClickOnRow = (record: object) => {
     // @ts-ignore
     if ("_id" in record) navigate(`${pathname}/view/${record._id!}`);
   };
+
+  function navigateToEditPage(id: string) {
+    navigate(`${pathname}/edit/${id}`);
+  }
+
+  async function onDelete(id: string) {
+    await onDeleteItem!([id]);
+  }
 
   async function fetchTableData() {
     setLoading(true);
