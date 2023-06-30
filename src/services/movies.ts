@@ -20,6 +20,12 @@ const createMovie = async (movie: any) => {
   return data;
 };
 
+const updateMovie = async (id: string, movie: any) => {
+  const { data } = await axios.put(`${apiUrl}/movies/${id}`, movie);
+
+  return data;
+};
+
 const toggleFavoriteMovies = async (ids: string[]) => {
   const { data } = await axios.put(`${apiUrl}/movies/toggleFavorites`, { ids });
 
@@ -40,6 +46,7 @@ const moviesService = {
   getAllMovies,
   getMovieById,
   createMovie,
+  updateMovie,
   getMoviesFilters,
   toggleFavoriteMovies,
   deleteMovies,

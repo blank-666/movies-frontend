@@ -1,6 +1,8 @@
 import { Image, List, Typography } from "antd";
 import { FC, ReactNode } from "react";
 
+import { getItemNames } from "../../helpers/formatting";
+
 import "./style.scss";
 
 interface IObjectStrings {
@@ -37,16 +39,20 @@ const ItemViewer: FC<IItemViewer> = ({ item, keyToLabelMap }) => {
         if (key === "poster")
           renderItem = <Image src={itemValue[1]} width={200} />;
         if (typeof value === "boolean") renderItem = value.toString();
-        if (Array.isArray(value))
-          renderItem = value.length ? (
+        if (Array.isArray(value)) {
+          const renderValue =
+            value.length && value[0]?.name ? getItemNames(value) : value;
+
+          renderItem = renderValue.length ? (
             <ul>
-              {value.map((item) => (
+              {renderValue.map((item: string) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
           ) : (
             "---"
           );
+        }
 
         return (
           <List.Item className="list-view" key={key}>

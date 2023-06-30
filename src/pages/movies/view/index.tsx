@@ -13,8 +13,6 @@ const ViewMovie: FC = () => {
     if (id) fetchMovie(id);
   }, []);
 
-  // const dataSource = movie ? Object.entries(movie) : [];
-  // console.log("dataSource", dataSource);
   async function fetchMovie(id: string) {
     const { movie: movieData } = await moviesService.getMovieById(id);
     setMovie(movieData);
