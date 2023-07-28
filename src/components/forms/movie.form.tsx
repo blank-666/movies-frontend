@@ -70,7 +70,10 @@ const MovieForm: FC<IMovieForm> = ({ form, editMode, onFinish }) => {
 
   async function onSubmit(values: any) {
     // if user don't update movie poster
-    if (values.poster?.uid === "-1") delete values.poster;
+    if (values.poster?.uid === "-1") {
+      values.keepPoster = true;
+      delete values.poster;
+    }
 
     const formData = convertToFormData(values);
     await onFinish(formData);

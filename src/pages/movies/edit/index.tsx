@@ -41,9 +41,7 @@ const EditMovie: FC = () => {
   const onFinish = async (formData: any) => {
     if (id) {
       const response = await moviesService.updateMovie(id, formData);
-
-      if (response.id) navigate(`/`);
-      navigate(`/movies/view/${response.id}`);
+      if (response?.id) navigate(`/movies/view/${response.id}`);
     }
   };
 
