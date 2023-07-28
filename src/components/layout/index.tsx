@@ -18,6 +18,7 @@ const PageLayout: FC = () => {
         collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
+        breakpoint="xl"
       >
         <SideMenu />
       </Sider>

@@ -1,18 +1,22 @@
-import { Button, Image, Popconfirm, Space } from "antd";
 import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { Button, Image, Popconfirm, Space } from "antd";
+
 import _ from "lodash";
-import type { SortOrder } from "antd/es/table/interface";
 import { v4 } from "uuid";
-import NavContainer from "../../../components/nav-container";
+
+import Table from "../../../components/table";
+import TableWrapper from "../../../components/table/tableWrapper";
+
+import type { SortOrder } from "antd/es/table/interface";
 import { IMoviesList } from "../../../interfaces/movies.interface";
+
 import { moviesService } from "../../../services";
 import { capitalizeFirstLetter } from "../../../helpers/formatting";
-import Table from "../../../components/table";
-
-import "./style.scss";
-import { StarFilled, StarOutlined } from "@ant-design/icons";
 import { LoadingContext } from "../../../context/loading.context";
-import { Link } from "react-router-dom";
+
+import { StarFilled, StarOutlined } from "@ant-design/icons";
+import "./style.scss";
 
 interface IFilters {
   [name: string]: string[];
@@ -170,7 +174,7 @@ const ManageMovies: FC = () => {
   };
 
   return (
-    <NavContainer menu={[]}>
+    <TableWrapper>
       {selectedIds.length ? (
         <Space style={{ margin: "1rem", marginLeft: 0 }}>
           <Button
@@ -206,7 +210,7 @@ const ManageMovies: FC = () => {
         rowSelection={rowSelection}
         actionsColumn
       />
-    </NavContainer>
+    </TableWrapper>
   );
 };
 
