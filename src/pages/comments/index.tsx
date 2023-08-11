@@ -29,7 +29,12 @@ const Comments: FC = () => {
 
   useEffect(() => {
     if (id) fetchComments(id);
-  }, [id, sort, currentChunk]);
+  }, [id, currentChunk]);
+
+  useEffect(() => {
+    // reset pagination when sort was changed
+    setCurrentChunk(1);
+  }, [sort]);
 
   const loadMoreComments = () => setCurrentChunk((prev) => prev + 1);
 
