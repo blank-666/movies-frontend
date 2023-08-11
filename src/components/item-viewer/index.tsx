@@ -1,4 +1,4 @@
-import { Image, List, Typography } from "antd";
+import { List, Typography } from "antd";
 import { FC, ReactNode } from "react";
 
 import { getItemNames } from "../../helpers/formatting";
@@ -10,7 +10,7 @@ interface IObjectStrings {
 }
 
 interface IItemViewer {
-  item: object | null;
+  item?: object | null;
   keyToLabelMap: IObjectStrings;
 }
 
@@ -36,8 +36,6 @@ const ItemViewer: FC<IItemViewer> = ({ item, keyToLabelMap }) => {
         const [key, value] = itemValue as any[];
         let renderItem: string | ReactNode = value ?? "---";
 
-        if (key === "poster")
-          renderItem = <Image src={itemValue[1]} width={200} />;
         if (typeof value === "boolean") renderItem = value.toString();
         if (Array.isArray(value)) {
           const renderValue =

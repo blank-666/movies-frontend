@@ -12,6 +12,7 @@ import {
   ManageMovies,
   ViewMovie,
   EditMovie,
+  Comments,
 } from "../../pages";
 import PageLayout from "../layout";
 
@@ -26,6 +27,7 @@ const AppRouter: FC = () => {
           <Route path="edit/:id" element={<EditMovie />} />
           <Route path="create" element={<CreateMovie />} />
         </Route>
+        <Route path="comments/:id" element={<Comments />} />
 
         <Route
           path="*"

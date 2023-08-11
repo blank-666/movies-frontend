@@ -27,7 +27,6 @@ const SideMenu: FC = () => {
       key: "movies",
       icon: <DesktopOutlined />,
       label: "Movies",
-      // onClick: () => navigate("/movies"),
       children: [
         {
           key: "movies_manage",
@@ -78,7 +77,7 @@ const SideMenu: FC = () => {
 
     let selectedItemKey = selectedItem?.key as string;
 
-    if ("children" in selectedItem!) {
+    if (selectedItemKey && "children" in selectedItem!) {
       const selectedSubItem =
         findSubItemByPathname(selectedItem as MenuItemWithChildren<MenuItem>) ||
         findManageSubItem(selectedItem as MenuItemWithChildren<MenuItem>);

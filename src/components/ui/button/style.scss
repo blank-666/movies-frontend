@@ -1,0 +1,57 @@
+$arrow-color: #a7a794;
+$arrow-height: 5px;
+$arrow-width: 7px;
+$active-color: dodgerblue;
+
+.sort-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  outline: none;
+  border: 1px solid lightgrey;
+  height: 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+
+  &__text {
+    margin: 0;
+    margin-right: 0.5rem;
+  }
+
+  .sort-button-arrow {
+    width: 0;
+    height: 0;
+    border-left: $arrow-height solid transparent;
+    border-right: $arrow-height solid transparent;
+    border-top-color: $arrow-color;
+    border-bottom-color: $arrow-color;
+    border-style: solid;
+  }
+
+  &__arrow-up {
+    @extend .sort-button-arrow;
+    border-width: 0 $arrow-height $arrow-width;
+    margin-bottom: 5px;
+  }
+
+  &__arrow-down {
+    @extend .sort-button-arrow;
+    border-width: $arrow-width $arrow-height 0;
+  }
+}
+
+.ascend {
+  .sort-button__arrow-up {
+    border-top-color: $active-color;
+    border-bottom-color: $active-color;
+  }
+}
+
+.descend {
+  .sort-button__arrow-down {
+    border-top-color: $active-color;
+    border-bottom-color: $active-color;
+  }
+}

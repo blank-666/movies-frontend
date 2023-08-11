@@ -1,0 +1,25 @@
+.comment-card {
+  margin-bottom: 1rem;
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+
+    &__avatar-container {
+      flex: 0.08;
+      min-width: 60px;
+    }
+
+    &__text-container {
+      flex: 1;
+    }
+
+    &__date-container {
+      position: absolute;
+      right: 0.5rem;
+      top: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+}

@@ -26,6 +26,7 @@ export interface IMovie {
   imdb: IMdb;
   countries: string;
   type: string;
+  total_comments: number;
   is_favorite?: boolean;
 }
 
