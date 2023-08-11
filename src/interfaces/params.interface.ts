@@ -1,8 +1,9 @@
 import { TablePaginationConfig } from "antd";
+import { ISortTypes } from "../components/ui/button/button.sort";
 
 export interface ISort {
   field: string;
-  order: string;
+  order: ISortTypes;
 }
 
 export interface IFilters {

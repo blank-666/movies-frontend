@@ -1,15 +1,16 @@
 import axios from "axios";
 import { apiUrl } from "./service";
-import { IActor } from "../interfaces/actors.interface";
-import { ISortTypes } from "../components/ui/button/button.sort";
+import { ITableParams } from "../interfaces/params.interface";
+import serialize from "../helpers/serialize-params";
 
-const getCommentsById = async (movieId: string, sort?: ISortTypes) => {
-  const query = sort ? `?sort[date]=${sort}` : "";
-  const { data } = await axios.get(`${apiUrl}/comments/${movieId}${query}`);
+const getCommentsById = async (movieId: string, params?: ITableParams) => {
+  const { data } = await axios.get(
+    `${apiUrl}/comments/${movieId}?${serialize(params)}`
+  );
   return data;
 };
 
-const createComment = async (actor: IActor) => {
+const createComment = async () => {
   const { data } = await axios.post(`${apiUrl}/comments`, {
     text: "test",
   });

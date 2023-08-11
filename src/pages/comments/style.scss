@@ -1,4 +1,7 @@
 .comments-list {
+  position: relative;
+  z-index: 1;
+
   &__header {
     display: flex;
     flex-direction: row;
