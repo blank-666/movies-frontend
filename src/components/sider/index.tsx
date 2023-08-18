@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-import React, { FC, useMemo } from "react";
+import React, { FC, useContext, useMemo } from "react";
 import type { MenuProps } from "antd";
 import { DesktopOutlined, UserOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,12 +9,14 @@ import {
   SubMenuType,
 } from "antd/es/menu/hooks/useItems";
 import { IMenuItem } from "../../interfaces/menu.interface";
+import { UserContext } from "../../context/user.context";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const SideMenu: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { user } = useContext(UserContext);
 
   const MENU_ITEMS: MenuItem[] = [
     {
@@ -37,6 +39,7 @@ const SideMenu: FC = () => {
           key: "movies_create",
           label: "Create",
           onClick: () => navigate("/movies/create"),
+          disabled: !user,
         },
       ],
     },

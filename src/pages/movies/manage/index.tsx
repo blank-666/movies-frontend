@@ -17,6 +17,7 @@ import { LoadingContext } from "../../../context/loading.context";
 
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 import "./style.scss";
+import { UserContext } from "../../../context/user.context";
 
 interface IFilters {
   [name: string]: string[];
@@ -48,10 +49,13 @@ const ManageMovies: FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const { setLoading } = useContext(LoadingContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getTableFilters();
   }, []);
+
+  const isAuthorized = !!user;
 
   const tableColumns = [
     {
@@ -208,7 +212,7 @@ const ManageMovies: FC = () => {
         data={dataSource}
         columns={tableColumns}
         rowSelection={rowSelection}
-        actionsColumn
+        actionsColumn={isAuthorized}
       />
     </TableWrapper>
   );

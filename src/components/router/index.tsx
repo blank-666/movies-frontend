@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import {
   createBrowserRouter,
   Link,
@@ -17,8 +17,10 @@ import {
 } from "../../pages";
 import PageLayout from "../layout";
 import { SignUp } from "../../pages/auth";
+import { UserContext } from "../../context/user.context";
 
 const AppRouter: FC = () => {
+  const { user } = useContext(UserContext);
   return (
     <Routes>
       <Route path="/" element={<PageLayout />}>
@@ -29,8 +31,12 @@ const AppRouter: FC = () => {
         <Route path="/movies">
           <Route index element={<ManageMovies />} />
           <Route path="view/:id" element={<ViewMovie />} />
-          <Route path="edit/:id" element={<EditMovie />} />
-          <Route path="create" element={<CreateMovie />} />
+          {user ? (
+            <>
+              <Route path="edit/:id" element={<EditMovie />} />
+              <Route path="create" element={<CreateMovie />} />{" "}
+            </>
+          ) : null}
         </Route>
         <Route path="comments/:id" element={<Comments />} />
 

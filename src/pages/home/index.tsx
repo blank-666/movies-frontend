@@ -1,7 +1,9 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
+import { UserContext } from "../../context/user.context";
 
 const Home: FC = () => {
-  return <h1> Hello! It's a home page!</h1>;
+  const { user } = useContext(UserContext);
+  return <h1> Hello{user ? ` ${user.name}` : ""}! It's a home page!</h1>;
 };
 
 export default Home;
