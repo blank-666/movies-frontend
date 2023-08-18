@@ -1,0 +1,36 @@
+.auth-form-container {
+  .form-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  .auth-form {
+    &__form-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .ant-form-item:first-child {
+        margin-right: 1rem;
+      }
+    }
+
+    .submit-button {
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+  }
+
+  .form-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}

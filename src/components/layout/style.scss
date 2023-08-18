@@ -1,12 +1,30 @@
 .app-layout {
   &__header {
     display: flex;
-    justify-content: center;
+    position: relative;
+    flex-direction: row;
+    justify-content: flex-end;
     align-items: center;
     color: #ffffff;
-    padding-inline: 50;
+    padding-inline: 5%;
     background-color: dodgerblue;
     border-bottom: 1px solid rgb(157, 155, 155);
+
+    .header-title {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .buttons-section {
+      display: flex;
+      justify-content: space-between;
+
+      .header-button {
+        margin-inline: 0.25rem;
+      }
+    }
   }
 
   &__sider {

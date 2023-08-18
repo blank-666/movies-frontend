@@ -13,14 +13,19 @@ import {
   ViewMovie,
   EditMovie,
   Comments,
+  SignIn,
 } from "../../pages";
 import PageLayout from "../layout";
+import { SignUp } from "../../pages/auth";
 
 const AppRouter: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<PageLayout />}>
         <Route index element={<Home />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+
         <Route path="/movies">
           <Route index element={<ManageMovies />} />
           <Route path="view/:id" element={<ViewMovie />} />
