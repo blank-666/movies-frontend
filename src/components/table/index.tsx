@@ -275,14 +275,18 @@ const Table: FC<ITable> = ({
 
   async function fetchTableData() {
     setLoading(true);
-    const { rows, total } = await getDataAction(tableParams);
+    try {
+      const { rows, total } = await getDataAction(tableParams);
 
-    onReceivingData(rows);
+      onReceivingData(rows);
 
-    setTotalCount(total);
-    setLoading(false);
+      setTotalCount(total);
+      setLoading(false);
 
-    if (onEndRefetch) onEndRefetch();
+      if (onEndRefetch) onEndRefetch();
+    } catch (e) {
+      setLoading(false);
+    }
   }
 
   return (

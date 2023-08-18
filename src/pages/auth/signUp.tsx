@@ -41,8 +41,13 @@ const SignUp: FC = () => {
     );
     if (passwordIsConfirmed) {
       setLoading(true);
-      const response = await authService.signUp(values);
-      // todo: add redirect to the sign-in page
+      try {
+        const response = await authService.signUp(values);
+        // todo: add redirect to the sign-in page
+      } catch (e) {
+        setLoading(false);
+      }
+
       setLoading(false);
     }
 
