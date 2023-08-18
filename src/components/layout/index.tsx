@@ -1,8 +1,11 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useContext, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button, Layout, Typography } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
+
+import { UserContext } from "../../context/user.context";
+import authService from "../../services/auth";
 
 import SideMenu from "../sider";
 
@@ -10,6 +13,8 @@ import "./style.scss";
 
 const PageLayout: FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
+
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -21,7 +26,20 @@ const PageLayout: FC = () => {
   const redirectToSignUp = () => navigate("/sign-up");
   const redirectToHome = () => navigate("/");
 
-  const renderHeaderButtons = useMemo(() => {
+  const logoutHandler = () => {
+    authService.logOut();
+    setUser(null);
+  };
+
+  const headerContent = useMemo(() => {
+    if (user) {
+      return (
+        <>
+          <Typography.Text className="user-name">{user.name}</Typography.Text>
+          <Button onClick={logoutHandler}>Log Out</Button>
+        </>
+      );
+    }
     if (!isAuthPage)
       return (
         <Button className="header-button" onClick={redirectToSignIn}>
@@ -39,7 +57,7 @@ const PageLayout: FC = () => {
           </Button>
         </>
       );
-  }, [isAuthPage, pathname]);
+  }, [isAuthPage, pathname, user]);
 
   return (
     <Layout className="app-layout">
@@ -63,7 +81,7 @@ const PageLayout: FC = () => {
           >
             Movies App
           </Typography.Title>
-          <div className="buttons-section">{renderHeaderButtons} </div>
+          <div className="buttons-section">{headerContent} </div>
         </Header>
         <Content className="app-layout__content">
           <Outlet />

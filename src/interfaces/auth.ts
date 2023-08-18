@@ -5,3 +5,8 @@ export interface ISignUpPayload {
   passwordConfirmation: string;
   lastName?: string;
 }
+
+export interface ISignInPayload {
+  email: string;
+  password: string;
+}

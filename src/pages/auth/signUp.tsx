@@ -1,9 +1,10 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Divider, Form, Input, Typography } from "antd";
 import { LoadingContext } from "../../context/loading.context";
 import Loader from "../../components/ui/loader/loader";
 import authService from "../../services/auth";
+import { UserContext } from "../../context/user.context";
 
 const SignUp: FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -13,8 +14,13 @@ const SignUp: FC = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
 
   const { isLoading, setLoading } = useContext(LoadingContext);
+  const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user]);
 
   const onChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -42,16 +48,14 @@ const SignUp: FC = () => {
     if (passwordIsConfirmed) {
       setLoading(true);
       try {
-        const response = await authService.signUp(values);
-        // todo: add redirect to the sign-in page
+        await authService.signUp(values);
+        navigate("/sign-in");
       } catch (e) {
         setLoading(false);
       }
 
       setLoading(false);
     }
-
-    console.log("values", values, passwordIsConfirmed);
   };
   return (
     <Card className="auth-form-container">
