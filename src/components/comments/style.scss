@@ -36,33 +36,26 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin-left: -2rem;
   padding: 0 2rem;
-
   transition: bottom 0.4s ease-out;
 
-  .comment-form-card {
-    margin-bottom: 1rem;
+  &__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
     max-width: 45rem;
+    padding: 1.5rem 0.5rem 2rem 0.5rem;
 
-    &__content {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
-      width: 100%;
-      max-width: 45rem;
-      padding-top: 1.5rem;
-      padding-bottom: 2rem;
-
-      &__textArea {
-        textarea {
-          resize: none;
-          min-height: 7rem;
-        }
+    &__textArea {
+      textarea {
+        resize: none;
+        min-height: 7rem;
       }
+    }
 
-      button {
-        margin-left: 1.5rem;
-      }
+    button {
+      margin-left: 1.5rem;
     }
   }
 
@@ -75,5 +68,27 @@
     width: 100%;
     height: 100%;
     z-index: 10;
+  }
+}
+
+@media (max-width: 599px) {
+  .comment-form-section {
+    width: -webkit-fill-available !important;
+
+    &__content {
+      flex-direction: column !important;
+      padding-bottom: 1rem;
+
+      &__textArea {
+        margin-bottom: 2rem;
+        textarea {
+          min-height: 4rem;
+        }
+      }
+
+      button {
+        width: 100%;
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { CSSProperties, FC, useMemo } from "react";
 import { Tooltip } from "antd";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
@@ -8,10 +8,12 @@ interface ICollapseButton {
   isActive: boolean;
   onClick: (value: boolean) => void;
   tooltipMessage?: string;
+  style?: CSSProperties;
 }
 
 const CollapseButton: FC<ICollapseButton> = ({
   isActive,
+  style,
   tooltipMessage,
   onClick,
 }) => {
@@ -25,14 +27,14 @@ const CollapseButton: FC<ICollapseButton> = ({
 
   if (!tooltipMessage || isActive)
     return (
-      <div className="collapse-button" onClick={clickHandler}>
+      <div className="collapse-button" style={style} onClick={clickHandler}>
         {arrowIcon}
       </div>
     );
 
   return (
     <Tooltip placement="top" title={tooltipMessage} arrow>
-      <div className="collapse-button" onClick={clickHandler}>
+      <div className="collapse-button" style={style} onClick={clickHandler}>
         {arrowIcon}
       </div>
     </Tooltip>

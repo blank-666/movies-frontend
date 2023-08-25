@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Typography } from "antd";
 import { ICommentsList } from "../../interfaces/comments.interface";
 import Comment from "./comments.item";
 
@@ -12,9 +13,13 @@ const CommentsList: FC<ICommentsListProps> = ({ movieTitle, comments }) => {
   return (
     <div>
       <h1>{movieTitle}</h1>
-      {comments.map((comment) => (
-        <Comment comment={comment} />
-      ))}
+      {comments.length ? (
+        comments.map((comment) => <Comment comment={comment} />)
+      ) : (
+        <Typography.Title level={5} style={{ textAlign: "center" }}>
+          No comments yet
+        </Typography.Title>
+      )}
     </div>
   );
 };

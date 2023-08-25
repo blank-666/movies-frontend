@@ -5,6 +5,7 @@ import CollapseButton from "../ui/button/button.collapse";
 import { INewComment } from "../../interfaces/comments.interface";
 import { UserContext } from "../../context/user.context";
 import { useParams } from "react-router-dom";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 interface ICommentForm {
   onAddComment: (comment: INewComment) => Promise<void>;
@@ -16,6 +17,7 @@ const CreateCommentForm: FC<ICommentForm> = ({ onAddComment }) => {
   const [commentText, setCommentText] = useState<string>("");
 
   const { id: movie_id } = useParams();
+  const { isMobile } = useWindowDimensions();
 
   const { user } = useContext(UserContext);
 
@@ -51,11 +53,16 @@ const CreateCommentForm: FC<ICommentForm> = ({ onAddComment }) => {
         isActive={formActive}
         onClick={onFormCollapse}
         tooltipMessage="Add comment"
+        style={{
+          position: "absolute",
+          top: "-2.7rem",
+          right: isMobile ? "1rem" : "10rem",
+        }}
       />
-      <div className="comment-form-card__content">
+      <div className="comment-form-section__content">
         <Input.TextArea
           placeholder="New comment..."
-          className="comment-form-card__content__textArea"
+          className="comment-form-section__content__textArea"
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
           showCount

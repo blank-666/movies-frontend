@@ -10,6 +10,8 @@ import authService from "../../services/auth";
 import SideMenu from "../sider";
 
 import "./style.scss";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const PageLayout: FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -17,6 +19,8 @@ const PageLayout: FC = () => {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const { isMobile } = useWindowDimensions();
 
   const isAuthPage = useMemo(() => {
     return pathname === "/sign-in" || pathname === "/sign-up";
@@ -36,7 +40,17 @@ const PageLayout: FC = () => {
       return (
         <>
           <Typography.Text className="user-name">{user.name}</Typography.Text>
-          <Button onClick={logoutHandler}>Log Out</Button>
+          {isMobile ? (
+            <Button
+              onClick={logoutHandler}
+              ghost
+              style={{ padding: "0 0.4rem" }}
+            >
+              <LogoutOutlined />
+            </Button>
+          ) : (
+            <Button onClick={logoutHandler}>Log Out</Button>
+          )}
         </>
       );
     }

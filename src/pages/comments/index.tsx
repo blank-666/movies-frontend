@@ -52,10 +52,9 @@ const Comments: FC = () => {
   });
 
   const addCommentHandler = async (newComment: INewComment) => {
-    const { comment } = await commentsService.createComment(newComment);
-    if (sort === "descend") {
-      setComments((prev) => [comment, ...prev]);
-    }
+    await commentsService.createComment(newComment);
+    setCurrentChunk(1);
+    await fetchComments(id!);
   };
 
   async function fetchComments(id: string) {
