@@ -1,10 +1,14 @@
-.comments-list {
+.comments-page {
   position: relative;
-  z-index: 1;
 
-  &__header {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+  &__content {
+    position: relative;
+    z-index: 1;
+
+    &__header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
   }
 }

@@ -1,13 +1,18 @@
 import { FC, useEffect, useContext, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
-import Comment from "../../components/comments/comments.item";
+import CreateCommentForm from "../../components/comments/comments.form";
+import CommentsList from "../../components/comments/comments.list";
 import SortButton, { ISortTypes } from "../../components/ui/button/button.sort";
 import Loader from "../../components/ui/loader/loader";
 
 import { commentsService } from "../../services";
+import { UserContext } from "../../context/user.context";
 import { LoadingContext } from "../../context/loading.context";
-import { ICommentsList } from "../../interfaces/comments.interface";
+import {
+  ICommentsList,
+  INewComment,
+} from "../../interfaces/comments.interface";
 import { ITableParams } from "../../interfaces/params.interface";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 
@@ -25,11 +30,12 @@ const Comments: FC = () => {
   const listEndRef = useRef(null);
 
   const { id } = useParams();
+  const { user } = useContext(UserContext);
   const { isLoading, setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     if (id) fetchComments(id);
-  }, [id, currentChunk]);
+  }, [id, currentChunk, sort]);
 
   useEffect(() => {
     // reset pagination when sort was changed
@@ -44,6 +50,13 @@ const Comments: FC = () => {
 
     loadMoreComments();
   });
+
+  const addCommentHandler = async (newComment: INewComment) => {
+    const { comment } = await commentsService.createComment(newComment);
+    if (sort === "descend") {
+      setComments((prev) => [comment, ...prev]);
+    }
+  };
 
   async function fetchComments(id: string) {
     setLoading(true);
@@ -76,18 +89,16 @@ const Comments: FC = () => {
   }
 
   return (
-    <div className="comments-list">
-      <div className="comments-list__header">
-        <SortButton sortBy="date" sort={sort} setSort={setSort} />
+    <div className="comments-page">
+      <div className="comments-page__content">
+        <div className="comments-page__content__header">
+          <SortButton sortBy="date" sort={sort} setSort={setSort} />
+        </div>
+        {isLoading ? <Loader /> : null}
+        <CommentsList movieTitle={movieTitle} comments={comments} />
+        <div ref={listEndRef} style={{ height: 50 }} />
       </div>
-      {isLoading ? <Loader /> : null}
-      <div>
-        <h1>{movieTitle}</h1>
-        {comments.map((comment) => (
-          <Comment comment={comment} />
-        ))}
-      </div>
-      <div ref={listEndRef} style={{ height: 50 }} />
+      {user ? <CreateCommentForm onAddComment={addCommentHandler} /> : null}
     </div>
   );
 };
