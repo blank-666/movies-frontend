@@ -10,8 +10,9 @@ interface ICommentsListProps {
 
 const CommentsList: FC<ICommentsListProps> = ({ movieTitle, comments }) => {
   if (!movieTitle) return null;
+
   return (
-    <div>
+    <div className="comments-list">
       <h1>{movieTitle}</h1>
       {comments.length ? (
         comments.map((comment) => (

@@ -56,7 +56,7 @@ const CreateCommentForm: FC<ICommentForm> = ({ onAddComment }) => {
         style={{
           position: "absolute",
           top: "-2.7rem",
-          right: isMobile ? "1rem" : "10rem",
+          right: isMobile ? "1rem" : "5%",
         }}
       />
       <div className="comment-form-section__content">
