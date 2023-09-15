@@ -14,7 +14,9 @@ const CommentsList: FC<ICommentsListProps> = ({ movieTitle, comments }) => {
     <div>
       <h1>{movieTitle}</h1>
       {comments.length ? (
-        comments.map((comment) => <Comment comment={comment} />)
+        comments.map((comment) => (
+          <Comment key={comment._id} comment={comment} />
+        ))
       ) : (
         <Typography.Title level={5} style={{ textAlign: "center" }}>
           No comments yet

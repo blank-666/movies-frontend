@@ -1,7 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 
-const apiUrl = "http://localhost:3006";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use((config) => {
   const UID = localStorage.getItem("uid");

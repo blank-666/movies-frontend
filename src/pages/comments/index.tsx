@@ -10,11 +10,13 @@ import { commentsService } from "../../services";
 import { UserContext } from "../../context/user.context";
 import { LoadingContext } from "../../context/loading.context";
 import {
+  IComment,
   ICommentsList,
   INewComment,
 } from "../../interfaces/comments.interface";
 import { ITableParams } from "../../interfaces/params.interface";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
+import { socket } from "../../socket";
 
 import "./style.scss";
 
@@ -23,7 +25,7 @@ const Comments: FC = () => {
   const [comments, setComments] = useState<ICommentsList>([]);
   const [totalComments, setTotalComments] = useState<number>(0);
 
-  const [sort, setSort] = useState<ISortTypes>("ascend");
+  const [sort, setSort] = useState<ISortTypes>("descend");
   const [currentChunk, setCurrentChunk] = useState<number>(1);
 
   const listRef = useRef(null);
@@ -32,6 +34,31 @@ const Comments: FC = () => {
   const { id } = useParams();
   const { user } = useContext(UserContext);
   const { isLoading, setLoading } = useContext(LoadingContext);
+
+  const onNewComment = (newComment: IComment) => {
+    const isSameUser = newComment.email === user?.email;
+    const isSameMovie = newComment.movie_id === id;
+    const shouldUpdateList = !isSameUser && isSameMovie;
+
+    const addToEnd = sort === "ascend" && comments.length < 10;
+
+    if (shouldUpdateList) {
+      if (sort === "descend") {
+        setComments((prevComments) => [newComment, ...prevComments]);
+      } else if (addToEnd) {
+        setComments((prevComments) => [...prevComments, newComment]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // get data from socket
+    socket.on("new-comment", ({ data }) => onNewComment(data));
+
+    return () => {
+      socket.off("new-comment");
+    };
+  }, [user, sort, comments.length, totalComments]);
 
   useEffect(() => {
     if (id) fetchComments(id);
