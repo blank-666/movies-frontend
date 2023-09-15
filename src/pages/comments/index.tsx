@@ -20,6 +20,12 @@ import { socket } from "../../socket";
 
 import "./style.scss";
 
+interface ITypingData {
+  name: string;
+  movieId: string;
+  typing: boolean;
+}
+
 const Comments: FC = () => {
   const [movieTitle, setMoviesTitle] = useState<string | null>(null);
   const [comments, setComments] = useState<ICommentsList>([]);
@@ -27,6 +33,7 @@ const Comments: FC = () => {
 
   const [sort, setSort] = useState<ISortTypes>("descend");
   const [currentChunk, setCurrentChunk] = useState<number>(1);
+  const [userTyping, setUserTyping] = useState<string | null>(null);
 
   const listRef = useRef(null);
   const listEndRef = useRef(null);
@@ -59,6 +66,29 @@ const Comments: FC = () => {
       socket.off("new-comment");
     };
   }, [user, sort, comments.length, totalComments]);
+
+  const onTyping = (typingData: ITypingData) => {
+    const { name, movieId, typing } = typingData;
+
+    const isCurrentMovie = movieId === id;
+
+    if (isCurrentMovie) {
+      if (typing) {
+        setUserTyping(name);
+      } else {
+        setUserTyping(null);
+      }
+    }
+  };
+
+  useEffect(() => {
+    // get data from typing-socket
+    socket.on("typing-status", ({ data }) => onTyping(data));
+
+    return () => {
+      socket.off("typing-status");
+    };
+  }, []);
 
   useEffect(() => {
     if (id) fetchComments(id);
@@ -117,11 +147,17 @@ const Comments: FC = () => {
   return (
     <div className="comments-page">
       <div className="comments-page__content">
-        <div className="comments-page__content__header">
+        {/* <div className="comments-page__content__header">
           <SortButton sortBy="date" sort={sort} setSort={setSort} />
-        </div>
+        </div> */}
         {isLoading ? <Loader /> : null}
-        <CommentsList movieTitle={movieTitle} comments={comments} />
+        <CommentsList
+          movieTitle={movieTitle}
+          userTyping={userTyping}
+          comments={comments}
+          sort={sort}
+          setSort={setSort}
+        />
         <div ref={listEndRef} style={{ height: 50 }} />
       </div>
       {user ? <CreateCommentForm onAddComment={addCommentHandler} /> : null}

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import classNames from "classnames";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 import "./style.scss";
 
@@ -12,6 +13,8 @@ interface ISortButton {
 }
 
 const SortButton: FC<ISortButton> = ({ sortBy, sort, setSort }) => {
+  const { isMobile } = useWindowDimensions();
+
   const buttonClasses = classNames({
     "sort-button": true,
     ascend: sort === "ascend",
@@ -25,7 +28,7 @@ const SortButton: FC<ISortButton> = ({ sortBy, sort, setSort }) => {
 
   return (
     <button className={buttonClasses} onClick={changeSortHandler}>
-      <p className="sort-button__text">Sort by {sortBy}</p>
+      {!isMobile ? <p className="sort-button__text">Sort by {sortBy}</p> : null}
       <div>
         <div className="sort-button__arrow-up" />
         <div className="sort-button__arrow-down" />

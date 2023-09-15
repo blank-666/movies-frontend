@@ -1,6 +1,23 @@
 .comments-list {
   padding-bottom: 6rem;
 
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    h5 {
+      margin: 1rem 0;
+    }
+
+    &__actions-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
   .comment-card {
     margin-bottom: 1rem;
 

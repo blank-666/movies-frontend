@@ -5,11 +5,5 @@
   &__content {
     position: relative;
     z-index: 1;
-
-    &__header {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
   }
 }
