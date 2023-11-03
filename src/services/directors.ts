@@ -1,16 +1,15 @@
-import axios from "axios";
+import axios from "./service";
 import serialize from "../helpers/serialize-params";
-import { apiUrl } from "./service";
 import { IDirector } from "../interfaces/directors.interface";
 
 const getDirectors = async (params?: any) => {
-  const { data } = await axios.get(`${apiUrl}/directors?${serialize(params)}`);
+  const { data } = await axios.get(`/directors?${serialize(params)}`);
 
   return data;
 };
 
 const addDirector = async (director: IDirector) => {
-  const { data } = await axios.post(`${apiUrl}/directors`, {
+  const { data } = await axios.post(`/directors`, {
     name: director,
   });
 

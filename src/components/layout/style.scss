@@ -33,6 +33,27 @@
       }
     }
 
+    .api-switch-container {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      top: 100%;
+      padding: 1rem;
+      border-bottom-left-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+      background-color: #afbdcb;
+
+      span {
+        color: #ffffff;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      &__switch {
+        margin-inline: 0.5rem;
+      }
+    }
+
     @media (max-width: 599px) {
       .user-name {
         margin-right: 0.5rem;
@@ -50,6 +71,7 @@
     display: flex;
     justify-content: center;
     padding: 2rem;
+    padding-top: 4rem;
     background-color: white;
   }
 }

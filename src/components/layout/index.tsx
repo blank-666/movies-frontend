@@ -3,17 +3,27 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button, Layout, Typography } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
+import SideMenu from "../sider";
+import ApiSwitch from "./api-version-controller";
 
 import { UserContext } from "../../context/user.context";
 import authService from "../../services/auth";
-
-import SideMenu from "../sider";
-
-import "./style.scss";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+
 import { LogoutOutlined } from "@ant-design/icons";
+import "./style.scss";
+
+export type IApiVersion = 1 | 2 | null;
 
 const PageLayout: FC = () => {
+  const localStorageApiVersion = localStorage.getItem("api-version");
+
+  const initialVersion = localStorageApiVersion ? +localStorageApiVersion : 1;
+
+  const [apiVersion, setApiVersion] = useState<IApiVersion>(
+    initialVersion as IApiVersion
+  );
+
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
   const { user, setUser } = useContext(UserContext);
@@ -96,9 +106,10 @@ const PageLayout: FC = () => {
             Movies App
           </Typography.Title>
           <div className="buttons-section">{headerContent} </div>
+          <ApiSwitch apiVersion={apiVersion} setApiVersion={setApiVersion} />
         </Header>
         <Content className="app-layout__content">
-          <Outlet />
+          <Outlet key={apiVersion} />
         </Content>
       </Layout>
     </Layout>
